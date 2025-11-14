@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mood Tracker</title>
+  <!-- p5.js library for drawing the flower -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
+  <!-- Application logic -->
+  <script src="app.js" defer></script>
+  <!-- Sketch containing the flower drawing logic -->
+  <script src="sketch.js" defer></script>
+  <style>
+    /* Base layout */
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #78a1f3, #9a67e3);
+      margin: 0;
+      padding: 1rem;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+    /* Card that contains both the flower and the controls */
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      max-width: 900px;
+      width: 100%;
+    }
+    .canvas-container {
+      flex: 1 1 400px;
+      min-width: 300px;
+      margin-bottom: 1rem;
+    }
+    .controls {
+      flex: 1 1 300px;
+      margin-left: 1rem;
+      min-width: 280px;
+    }
+    .stats {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    .stats h2 {
+      margin-bottom: 0.5rem;
+    }
+    .slider-row {
+      display: flex;
+      align-items: center;
+      margin-top: 0.5rem;
+    }
+    .slider-row label {
+      width: 100px;
+      font-weight: bold;
+    }
+    .slider-row input[type="range"] {
+      flex: 1;
+      margin: 0 0.5rem;
+    }
+    .slider-row span {
+      width: 32px;
+      text-align: right;
+    }
+    button {
+      padding: 0.4rem 0.8rem;
+      margin-right: 0.5rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background: #6246ea;
+      color: #fff;
+    }
+    button:nth-of-type(2) {
+      background: #fff;
+      color: #6246ea;
+      border: 1px solid #6246ea;
+    }
+    small {
+      display: block;
+      margin-top: 0.2rem;
+      color: #666;
+      font-size: 0.75rem;
+    }
+    /* Toast visibility */
+    #toast.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="canvas-container" id="p5-container"></div>
+    <div class="controls">
+      <div class="stats">
+        <h2>Current Mood</h2>
+        <div>
+          <span>💪 Motivation: <span id="motivationValue">50</span></span><br>
+          <span>🎯 Focus: <span id="focusValue">50</span></span><br>
+          <span>🧘 Calm: <span id="calmValue">100</span></span>
+        </div>
+      </div>
+      <section>
+        <div class="slider-row">
+          <label for="motivationSlider">Motivation</label>
+          <input id="motivationSlider" type="range" min="0" max="100" value="50">
+          <span id="motivationSliderValue">50</span>
+        </div>
+        <small>Height, Bloom &amp; Sun - How energized do you feel?</small>
+      </section>
+      <section>
+        <div class="slider-row">
+          <label for="focusSlider">Focus</label>
+          <input id="focusSlider" type="range" min="0" max="100" value="50">
+          <span id="focusSliderValue">50</span>
+        </div>
+        <small>Steadiness &amp; Stem - How concentrated is your mind?</small>
+      </section>
+      <section>
+        <div class="slider-row">
+          <label for="stressSlider">Stress</label>
+          <input id="stressSlider" type="range" min="0" max="100" value="0">
+          <span id="stressSliderValue">0</span>
+        </div>
+        <small>Droop &amp; Color - How much pressure do you feel?</small>
+      </section>
+      <div>
+        <button id="logMoodBtn">Log Mood</button>
+        <button id="clearLogBtn">Clear Log</button>
+      </div>
+    </div>
+  </div>
+  <!-- Recent logs display -->
+  <div style="max-width:900px; width:100%; margin-top:1rem;">
+    <h3 style="color:#fff; margin-bottom:0.5rem;">Recent Logs</h3>
+    <div id="historyContent" style="background:#fff; border-radius:12px; padding:1rem; min-height:80px; box-shadow:0 2px 8px rgba(0,0,0,0.1);"></div>
+  </div>
+
+  <!-- Toast notification -->
+  <div id="toast" style="position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#333; color:#fff; padding:0.8rem 1.2rem; border-radius:8px; opacity:0; transition:opacity 0.3s ease; pointer-events:none;"></div>
+</body>
+</html>
