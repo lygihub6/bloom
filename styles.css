@@ -260,9 +260,8 @@ body {
     transition: all 0.2s ease;
 }
 
-/* Strategies Container */
 .strategies-container {
-    padding: 20px 0;
+    padding: 12px 0;            /* was 20px 0 */
     border-top: 1px solid #e5e7eb;
     border-bottom: 1px solid #e5e7eb;
 }
@@ -270,7 +269,7 @@ body {
 .strategies-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
+    gap: 10px;                  /* was 12px */
 }
 
 .strategy-btn {
