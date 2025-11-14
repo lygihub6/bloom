@@ -1,4 +1,32 @@
 // sketch.js - Modified p5.js sketch for integration with HTML UI
+// Allow app.js to push a new entry directly into the p5 timeline
+window.p5AddMood = function(entry) {
+  // normalize fields used by your p5 timeline
+  const mot = entry.motivation ?? entry.mot ?? 0;
+  const foc = entry.focus      ?? entry.foc ?? 0;
+  const st  = entry.stress     ?? entry.st  ?? 0;
+
+  moodLog.push({
+    mot, foc, st,
+    note: entry.note || "",
+    t: entry.t || Date.now(),
+    createdAt: entry.createdAt || new Date().toISOString()
+  });
+  if (moodLog.length > MAX_LOG) moodLog.shift();
+};
+
+// Allow app.js to force a reload from localStorage
+window.p5ReloadMoodHistory = function() {
+  const saved = localStorage.getItem('moodHistory');
+  if (!saved) return;
+  try {
+    const data = JSON.parse(saved);
+    moodLog = Array.isArray(data) ? data.slice(-MAX_LOG) : [];
+  } catch (e) {
+    console.warn('Could not parse moodHistory from localStorage', e);
+  }
+};
+
 let motivation = 70, focus = 50, stress = 10;
 let t = 0;
 
