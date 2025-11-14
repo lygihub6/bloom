@@ -21,10 +21,10 @@ function updateDateTime() {
 updateDateTime();
 setInterval(updateDateTime, 60000);
 
-// Slider event handlers
-const motivationSlider = document.getElementById('motivationSlider');
-const focusSlider = document.getElementById('focusSlider');
-const stressSlider = document.getElementById('stressSlider');
+// Slider elements (will be set after DOM is ready)
+let motivationSlider = null;
+let focusSlider = null;
+let stressSlider = null;
 
 // Update display values when sliders change
 // This function is resilient to missing elements, since different UI layouts may
@@ -65,16 +65,24 @@ function updateDisplayValues() {
     }
 }
 
-// Add event listeners to sliders.  Check existence to avoid errors if a slider
-// element is missing from the DOM (for example, in a simplified layout).
-if (motivationSlider) {
-    motivationSlider.addEventListener('input', updateDisplayValues);
-}
-if (focusSlider) {
-    focusSlider.addEventListener('input', updateDisplayValues);
-}
-if (stressSlider) {
-    stressSlider.addEventListener('input', updateDisplayValues);
+// Initialize sliders after DOM is loaded
+function initSliders() {
+    motivationSlider = document.getElementById('motivationSlider');
+    focusSlider      = document.getElementById('focusSlider');
+    stressSlider     = document.getElementById('stressSlider');
+
+    if (motivationSlider) {
+        motivationSlider.addEventListener('input', updateDisplayValues);
+    }
+    if (focusSlider) {
+        focusSlider.addEventListener('input', updateDisplayValues);
+    }
+    if (stressSlider) {
+        stressSlider.addEventListener('input', updateDisplayValues);
+    }
+
+    // Sync the numbers with whatever the sliders start at
+    updateDisplayValues();
 }
 
 // Journal Modal functionality
