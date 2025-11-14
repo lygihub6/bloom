@@ -293,9 +293,9 @@ body {
 }
 
 .strategy-text {
-    font-size: 15px;            /* was 12px — bigger name */
-    font-weight: 600;
-    color: #2596be;
+    font-size: 18px;            /* was 12px — bigger name */
+    font-weight: 700;
+    color: #26cfed;
     text-align: center;
 }
 
