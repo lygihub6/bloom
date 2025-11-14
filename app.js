@@ -80,24 +80,7 @@ function saveMoodWithJournal() {
         timestamp: Date.now(),
         t: Date.now(),
         createdAt: new Date().toISOString()
-    };
-    // Keep p5 timeline in sync
-if (window.p5AddMood) {
-  window.p5AddMood(moodData);        // push into in-memory timeline
-} else if (window.p5ReloadMoodHistory) {
-  window.p5ReloadMoodHistory();      // or reload from localStorage
-}
-    // Get existing history from localStorage
-    let history = [];
-    const savedHistory = localStorage.getItem('moodHistory');
-    if (savedHistory) {
-        try {
-            history = JSON.parse(savedHistory);
-        } catch (e) {
-            console.error('Error parsing mood history:', e);            
-        }
-    }
-    
+    };   
     // Add new mood data
     history.push(moodData);
     
@@ -116,7 +99,24 @@ if (window.p5AddMood) {
             moodLog.shift();
         }
     }
-    
+    // --- BEGIN PATCH: notify p5 timeline ---
+if (window.p5AddMood) {
+  // Build the same shape we store in localStorage
+  const moodData = {
+    motivation: currentMotivation, // <-- use your actual variables
+    focus:      currentFocus,      // e.g., from sliders or state
+    stress:     currentStress,
+    note:       journalTextArea ? journalTextArea.value : "", // or your note source
+    t:          Date.now(),
+    createdAt:  new Date().toISOString()
+  };
+  window.p5AddMood(moodData);
+} else if (window.p5ReloadMoodHistory) {
+  // Fallback if p5AddMood isn't defined yet
+  window.p5ReloadMoodHistory();
+}
+// --- END PATCH ---
+
     // Update history display
     updateHistoryDisplay();
     
