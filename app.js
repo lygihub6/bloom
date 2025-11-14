@@ -81,7 +81,12 @@ function saveMoodWithJournal() {
         t: Date.now(),
         createdAt: new Date().toISOString()
     };
-    
+    // Keep p5 timeline in sync
+if (window.p5AddMood) {
+  window.p5AddMood(moodData);        // push into in-memory timeline
+} else if (window.p5ReloadMoodHistory) {
+  window.p5ReloadMoodHistory();      // or reload from localStorage
+}
     // Get existing history from localStorage
     let history = [];
     const savedHistory = localStorage.getItem('moodHistory');
@@ -89,7 +94,7 @@ function saveMoodWithJournal() {
         try {
             history = JSON.parse(savedHistory);
         } catch (e) {
-            console.error('Error parsing mood history:', e);
+            console.error('Error parsing mood history:', e);            
         }
     }
     
