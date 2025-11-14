@@ -1,7 +1,11 @@
-// sketch.js - Modified p5.js sketch for integration with HTML UI
-// Allow app.js to push a new entry directly into the p5 timeline
+// Mood Log
+let moodLog = [];
+const MAX_LOG = 120;
+// --- BEGIN PATCH: p5 hooks so app.js can sync the timeline ---
+
+// Push a single new entry into the p5 timeline immediately.
 window.p5AddMood = function(entry) {
-  // normalize fields used by your p5 timeline
+  // Normalize possible keys coming from app.js
   const mot = entry.motivation ?? entry.mot ?? 0;
   const foc = entry.focus      ?? entry.foc ?? 0;
   const st  = entry.stress     ?? entry.st  ?? 0;
@@ -15,24 +19,28 @@ window.p5AddMood = function(entry) {
   if (moodLog.length > MAX_LOG) moodLog.shift();
 };
 
-// Allow app.js to force a reload from localStorage
+// Reload the entire history from localStorage (fallback).
 window.p5ReloadMoodHistory = function() {
   const saved = localStorage.getItem('moodHistory');
   if (!saved) return;
   try {
     const data = JSON.parse(saved);
-    moodLog = Array.isArray(data) ? data.slice(-MAX_LOG) : [];
+    if (Array.isArray(data)) {
+      // Keep the most recent MAX_LOG entries
+      moodLog = data.slice(-MAX_LOG).map(d => ({
+        mot: d.motivation ?? d.mot ?? 0,
+        foc: d.focus      ?? d.foc ?? 0,
+        st:  d.stress     ?? d.st  ?? 0,
+        note: d.note || "",
+        t: d.t || Date.now(),
+        createdAt: d.createdAt || new Date().toISOString()
+      }));
+    }
   } catch (e) {
     console.warn('Could not parse moodHistory from localStorage', e);
   }
 };
-
-let motivation = 70, focus = 50, stress = 10;
-let t = 0;
-
-// Mood Log
-let moodLog = [];
-const MAX_LOG = 120;
+// --- END PATCH ---
 
 // Ground constants
 const GROUND_H = 60;
