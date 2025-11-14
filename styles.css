@@ -152,9 +152,8 @@ body {
     gap: 18px;                  /* was 25px */
 }
 
-/* Slider Groups */
 .slider-group {
-    padding-bottom: 20px;
+    padding-bottom: 12px;       /* was 20px */
 }
 
 .slider-header {
@@ -207,7 +206,7 @@ body {
 .slider-description {
     font-size: 13px;
     color: #6b7280;
-    margin-bottom: 12px;
+    margin-bottom: 6px;
 }
 
 /* Custom Sliders */
