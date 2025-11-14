@@ -57,7 +57,8 @@ function setup() {
   // Create canvas in the specific container
   let canvas = createCanvas(400, 500);
   canvas.parent('p5-container');
-  
+  if (window.p5ReloadMoodHistory) window.p5ReloadMoodHistory();
+}
   colorMode(HSB, 360, 100, 100, 100);
   noStroke();
   
