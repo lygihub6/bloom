@@ -140,17 +140,16 @@ body {
     border-color: #7c3aed;
 }
 
-/* Right Panel */
 .right-panel {
     flex: 1;
     background: white;
     border-radius: 20px;
-    padding: 30px;
+    padding: 22px;              /* was 30px */
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: 25px;
+    gap: 18px;                  /* was 25px */
 }
 
 /* Slider Groups */
