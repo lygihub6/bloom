@@ -49,26 +49,47 @@ focusSlider.addEventListener('input', updateDisplayValues);
 stressSlider.addEventListener('input', updateDisplayValues);
 
 // Journal Modal functionality
+// These elements may not exist if the UI has been simplified to log without a modal.
 const journalOverlay = document.getElementById('journalOverlay');
 const journalModal = document.getElementById('journalModal');
 const journalText = document.getElementById('journalText');
 const saveJournalBtn = document.getElementById('saveJournal');
 const cancelJournalBtn = document.getElementById('cancelJournal');
 
+/**
+ * Open the journal modal if it exists. If no modal is present, log the mood
+ * immediately using the current slider values and an empty note. This allows
+ * the "Log Mood" button to work regardless of whether the reflection UI
+ * (modal + overlay) is included in the page.
+ */
 function openJournalModal() {
-    journalOverlay.classList.add('active');
-    journalModal.classList.add('active');
-    journalText.focus();
+    // If both overlay and modal exist, show them and focus the textarea
+    if (journalOverlay && journalModal && journalText) {
+        journalOverlay.classList.add('active');
+        journalModal.classList.add('active');
+        journalText.focus();
+    } else {
+        // No modal present — log the mood immediately without a note
+        saveMoodWithJournal();
+    }
 }
 
+/**
+ * Close the journal modal if it exists. Clears the journal textarea when
+ * closing. Safe to call even when the modal elements are missing.
+ */
 function closeJournalModal() {
-    journalOverlay.classList.remove('active');
-    journalModal.classList.remove('active');
-    journalText.value = '';
+    if (journalOverlay) journalOverlay.classList.remove('active');
+    if (journalModal) journalModal.classList.remove('active');
+    if (journalText) journalText.value = '';
 }
 
 // Save mood with journal entry
 function saveMoodWithJournal() {
+    // Gracefully handle the case where the journal textarea is absent
+    const noteValue = journalText ? journalText.value : '';
+    const now = Date.now();
+
     const moodData = {
         motivation: parseInt(motivationSlider.value),
         focus: parseInt(focusSlider.value),
@@ -76,10 +97,10 @@ function saveMoodWithJournal() {
         mot: parseInt(motivationSlider.value), // for p5.js compatibility
         foc: parseInt(focusSlider.value),
         st: parseInt(stressSlider.value),
-        note: journalText.value,
-        timestamp: Date.now(),
-        t: Date.now(),
-        createdAt: new Date().toISOString()
+        note: noteValue,
+        timestamp: now,
+        t: now,
+        createdAt: new Date(now).toISOString()
     };
     
     // Get existing history from localStorage
@@ -206,24 +227,39 @@ function showToast(message) {
 }
 
 // Button event handlers
-document.getElementById('logMoodBtn').addEventListener('click', openJournalModal);
-document.getElementById('clearLogBtn').addEventListener('click', clearAllLogs);
-saveJournalBtn.addEventListener('click', saveMoodWithJournal);
-cancelJournalBtn.addEventListener('click', closeJournalModal);
+// Attach handlers only if the elements exist. This prevents errors when the
+// journal modal is not present in the DOM (e.g., simplified UI without reflection).
+const logMoodBtnEl = document.getElementById('logMoodBtn');
+if (logMoodBtnEl) {
+    logMoodBtnEl.addEventListener('click', openJournalModal);
+}
+const clearLogBtnEl = document.getElementById('clearLogBtn');
+if (clearLogBtnEl) {
+    clearLogBtnEl.addEventListener('click', clearAllLogs);
+}
+if (saveJournalBtn) {
+    saveJournalBtn.addEventListener('click', saveMoodWithJournal);
+}
+if (cancelJournalBtn) {
+    cancelJournalBtn.addEventListener('click', closeJournalModal);
+}
 
-// Close modal with Escape key
+// Close modal with Escape key and save with Ctrl/Cmd + Enter when modal is active
 document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && journalModal.classList.contains('active')) {
+    // Close only if journalModal exists and is active
+    if (e.key === 'Escape' && journalModal && journalModal.classList.contains('active')) {
         closeJournalModal();
     }
-    // Save with Ctrl/Cmd + Enter
-    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter' && journalModal.classList.contains('active')) {
+    // Save with Ctrl/Cmd + Enter when modal is active
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter' && journalModal && journalModal.classList.contains('active')) {
         saveMoodWithJournal();
     }
 });
 
-// Close modal when clicking overlay
-journalOverlay.addEventListener('click', closeJournalModal);
+// Close modal when clicking overlay (if overlay exists)
+if (journalOverlay) {
+    journalOverlay.addEventListener('click', closeJournalModal);
+}
 
 // Initialize display
 updateDisplayValues();
