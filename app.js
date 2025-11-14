@@ -317,12 +317,11 @@ if (journalOverlay) {
     journalOverlay.addEventListener('click', closeJournalModal);
 }
 
-// Initialize display
-updateDisplayValues();
-updateHistoryDisplay();
-
-// Refresh history display every 30 seconds
-setInterval(updateHistoryDisplay, 30000);
+// Initialize once DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    initSliders();
+    updateHistoryDisplay();
+});
 
 /*
  * Strategy functionality
