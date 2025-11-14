@@ -218,6 +218,12 @@ function clearAllLogs() {
 // Toast notification
 function showToast(message) {
     const toast = document.getElementById('toast');
+    // If the toast element is missing from the page, fall back to a simple alert.
+    if (!toast) {
+        // Only use alert as a fallback; avoid errors when no toast container exists.
+        alert(message);
+        return;
+    }
     toast.textContent = message;
     toast.classList.add('active');
     
@@ -229,11 +235,21 @@ function showToast(message) {
 // Button event handlers
 // Attach handlers only if the elements exist. This prevents errors when the
 // journal modal is not present in the DOM (e.g., simplified UI without reflection).
-const logMoodBtnEl = document.getElementById('logMoodBtn');
+let logMoodBtnEl = document.getElementById('logMoodBtn');
+// Fall back to a button whose text contains "log mood" if the expected ID isn't found.
+if (!logMoodBtnEl) {
+    const allButtons = Array.from(document.getElementsByTagName('button'));
+    logMoodBtnEl = allButtons.find(btn => /log\s*mood/i.test(btn.textContent));
+}
 if (logMoodBtnEl) {
     logMoodBtnEl.addEventListener('click', openJournalModal);
 }
-const clearLogBtnEl = document.getElementById('clearLogBtn');
+let clearLogBtnEl = document.getElementById('clearLogBtn');
+// Fall back to a button whose text contains "clear log" if the expected ID isn't found.
+if (!clearLogBtnEl) {
+    const allButtons = Array.from(document.getElementsByTagName('button'));
+    clearLogBtnEl = allButtons.find(btn => /clear\s*log/i.test(btn.textContent));
+}
 if (clearLogBtnEl) {
     clearLogBtnEl.addEventListener('click', clearAllLogs);
 }
