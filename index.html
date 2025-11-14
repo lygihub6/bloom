@@ -1,11 +1,128 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Mood Flower 🌻</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bloom - Interactive Mood Tracker</title>
+    
+    <!-- p5.js library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
-  </head>
-  <body>
+    
+    <!-- Custom styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                🌻 Bloom
+                <span class="tagline">Track your emotional garden</span>
+            </div>
+            <div class="date-time" id="dateTime"></div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <div class="content-wrapper">
+            <!-- p5.js Canvas Section -->
+            <div class="canvas-section">
+                <div class="canvas-wrapper" id="p5-container">
+                    <!-- p5.js sketch will be inserted here -->
+                </div>
+            </div>
+
+            <!-- Modern Controls Section -->
+            <div class="controls-section">
+                <div class="mood-display">
+                    <h2 class="mood-title">Current Mood</h2>
+                    <div class="mood-stats">
+                        <div class="mood-stat">
+                            <div class="mood-stat-label">Motivation</div>
+                            <div class="mood-stat-value" id="motivationValue">70</div>
+                        </div>
+                        <div class="mood-stat">
+                            <div class="mood-stat-label">Focus</div>
+                            <div class="mood-stat-value" id="focusValue">50</div>
+                        </div>
+                        <div class="mood-stat">
+                            <div class="mood-stat-label">Calm</div>
+                            <div class="mood-stat-value" id="calmValue">90</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slider-container">
+                    <div class="slider-header">
+                        <div class="slider-label">
+                            <span class="slider-icon motivation-icon">☀️</span>
+                            Motivation
+                        </div>
+                        <span class="slider-value" id="motivationSliderValue">70</span>
+                    </div>
+                    <div class="slider-description">Height, Bloom & Sun - How energized do you feel?</div>
+                    <input type="range" class="slider motivation" id="motivationSlider" min="0" max="100" value="70">
+                </div>
+
+                <div class="slider-container">
+                    <div class="slider-header">
+                        <div class="slider-label">
+                            <span class="slider-icon focus-icon">🎯</span>
+                            Focus
+                        </div>
+                        <span class="slider-value" id="focusSliderValue">50</span>
+                    </div>
+                    <div class="slider-description">Steadiness & Stem - How concentrated is your mind?</div>
+                    <input type="range" class="slider focus" id="focusSlider" min="0" max="100" value="50">
+                </div>
+
+                <div class="slider-container">
+                    <div class="slider-header">
+                        <div class="slider-label">
+                            <span class="slider-icon stress-icon">💨</span>
+                            Stress
+                        </div>
+                        <span class="slider-value" id="stressSliderValue">10</span>
+                    </div>
+                    <div class="slider-description">Droop & Color - How much pressure do you feel?</div>
+                    <input type="range" class="slider stress" id="stressSlider" min="0" max="100" value="10">
+                </div>
+
+                <div class="buttons">
+                    <button class="btn btn-primary" id="logMoodBtn">
+                        📊 Log Mood
+                    </button>
+                    <button class="btn btn-secondary" id="clearLogBtn">
+                        🔄 Clear Log
+                    </button>
+                </div>
+
+                <!-- Mood History Summary -->
+                <div class="history-summary" id="historySummary">
+                    <h3>Recent Logs</h3>
+                    <div id="historyContent">No mood logs yet</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Journal Modal -->
+    <div class="journal-overlay" id="journalOverlay"></div>
+    <div class="journal-modal" id="journalModal">
+        <h2>🪶 Journal Reflection</h2>
+        <p>What made you feel this way?</p>
+        <textarea id="journalText" rows="5" placeholder="Write your thoughts here..."></textarea>
+        <div class="journal-buttons">
+            <button class="btn btn-primary" id="saveJournal">✅ Save</button>
+            <button class="btn btn-secondary" id="cancelJournal">✖ Cancel</button>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Scripts -->
+    <script src="config.js"></script>
     <script src="sketch.js"></script>
-  </body>
+    <script src="app.js"></script>
+</body>
 </html>
