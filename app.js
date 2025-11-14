@@ -312,3 +312,268 @@ updateHistoryDisplay();
 
 // Refresh history display every 30 seconds
 setInterval(updateHistoryDisplay, 30000);
+
+/*
+ * Strategy functionality
+ *
+ * The strategies feature allows users to select quick actions that
+ * influence their mood levels. Each strategy belongs to one of three
+ * types: motivation, focus, or stress. Completing a motivation or focus
+ * strategy will increase the corresponding slider by 10 points (capped
+ * at 100), while completing a stress strategy will decrease the stress
+ * slider by 10 points (floored at 0). If strategy modal elements are
+ * present in the DOM, the modal will display details and steps for
+ * the selected strategy; otherwise, the effect is applied immediately.
+ */
+
+// Strategy definitions
+const strategies = {
+    motivation: {
+        setGoal: {
+            title: "📌 Set a Clear Goal",
+            description: "Define an attainable goal to give yourself direction and purpose.",
+            steps: [
+                "Identify a meaningful goal",
+                "Break it down into smaller milestones",
+                "Write it down and keep it visible",
+                "Set a timeline to reach it",
+                "Take your first step now",
+                "Celebrate progress"
+            ]
+        },
+        smallTask: {
+            title: "✅ Complete a Small Task",
+            description: "Small wins build momentum and boost your confidence.",
+            steps: [
+                "Pick a quick, easy task",
+                "Focus solely on completing it",
+                "Finish within a short timeframe",
+                "Acknowledge your accomplishment",
+                "Use the momentum to tackle another task",
+                "Celebrate each success"
+            ]
+        },
+        rewardYourself: {
+            title: "🎁 Reward Yourself",
+            description: "Rewards can motivate you to continue working toward your goals.",
+            steps: [
+                "Choose a small, healthy reward",
+                "Finish a task or goal",
+                "Treat yourself to the reward",
+                "Reflect on your achievement",
+                "Plan your next goal",
+                "Repeat"
+            ]
+        },
+        motivateOthers: {
+            title: "🤝 Motivated by Others",
+            description: "Connecting with others can inspire you and keep you on track.",
+            steps: [
+                "Share your goals with a friend",
+                "Ask for support and encouragement",
+                "Discuss your progress regularly",
+                "Celebrate successes together",
+                "Offer support in return",
+                "Stay accountable"
+            ]
+        }
+    },
+    focus: {
+        eatHealthy: {
+            title: "🥗 Eat Healthier",
+            description: "Nutrition impacts your ability to concentrate and stay alert.",
+            steps: [
+                "Choose a healthy snack (fruit, nuts, yogurt)",
+                "Drink a glass of water",
+                "Avoid sugary or processed foods",
+                "Plan meals with whole foods",
+                "Notice how your energy improves",
+                "Maintain hydration"
+            ]
+        },
+        sleepBetter: {
+            title: "🛌 Sleep Better",
+            description: "Adequate sleep enhances focus and cognitive function.",
+            steps: [
+                "Set a consistent bedtime",
+                "Turn off screens an hour before bed",
+                "Relax with light stretching or reading",
+                "Keep your bedroom cool and dark",
+                "Wake up at the same time daily",
+                "Notice improved focus"
+            ]
+        },
+        cleanSpace: {
+            title: "🧹 Clean Your Space",
+            description: "A tidy environment helps clear your mind and improve concentration.",
+            steps: [
+                "Remove clutter from your workspace",
+                "Put away unnecessary items",
+                "Wipe surfaces",
+                "Arrange supplies neatly",
+                "Take a deep breath",
+                "Start your task in a clean space"
+            ]
+        },
+        focusMusic: {
+            title: "🎧 Focus Music",
+            description: "Calming background music can help you concentrate.",
+            steps: [
+                "Choose instrumental or ambient music",
+                "Adjust volume to a comfortable level",
+                "Eliminate other distractions",
+                "Start your work",
+                "Let the music keep you on track",
+                "Take breaks as needed"
+            ]
+        }
+    },
+    stress: {
+        takeWalk: {
+            title: "🚶 Take a Walk",
+            description: "Moving your body reduces tension and clears your mind.",
+            steps: [
+                "Stand up and stretch",
+                "Step outside or around your space",
+                "Walk at a gentle pace for 10 minutes",
+                "Focus on your breath and surroundings",
+                "Notice your stress decreasing",
+                "Return refreshed"
+            ]
+        },
+        deepBreath: {
+            title: "🌬 Deep Breath",
+            description: "Controlled breathing activates your body's relaxation response.",
+            steps: [
+                "Sit comfortably",
+                "Inhale slowly through your nose for 4 counts",
+                "Hold for 4 counts",
+                "Exhale through your mouth for 6 counts",
+                "Repeat 5–10 times",
+                "Feel the tension leaving"
+            ]
+        },
+        talkFriend: {
+            title: "🗣 Talk with a Friend",
+            description: "Sharing your feelings helps release stress and gain perspective.",
+            steps: [
+                "Call or message a trusted friend",
+                "Express what's on your mind",
+                "Listen to their responses",
+                "Share a few laughs or positive thoughts",
+                "Thank them for their support",
+                "Continue your day with a lighter mood"
+            ]
+        }
+    }
+};
+
+// Strategy modal element references (may be null in simplified layouts)
+const strategyOverlay = document.getElementById('strategyOverlay');
+const strategyModal = document.getElementById('strategyModal');
+const strategyTitle = document.getElementById('strategyTitle');
+const strategyDescription = document.getElementById('strategyDescription');
+const strategySteps = document.getElementById('strategySteps');
+const completeStrategyBtn = document.getElementById('completeStrategy');
+const closeStrategyBtn = document.getElementById('closeStrategy');
+
+// Track the current strategy selection
+let currentStrategy = null;
+
+/**
+ * Open the strategy modal and populate it with the selected strategy's
+ * details. If the modal does not exist, complete the strategy immediately.
+ *
+ * @param {string} type - The strategy type ('motivation', 'focus', 'stress').
+ * @param {string} strategy - The strategy key within the type.
+ */
+function openStrategyModal(type, strategy) {
+    const strategyData = strategies[type] && strategies[type][strategy];
+    if (!strategyData) return;
+    currentStrategy = { type, strategy };
+    // If modal elements are present, show them; otherwise complete immediately
+    if (strategyModal && strategyOverlay && strategyTitle && strategyDescription && strategySteps) {
+        // Populate modal content
+        strategyTitle.textContent = strategyData.title;
+        strategyDescription.textContent = strategyData.description;
+        let stepsHTML = '<ol style="margin: 0; padding-left: 1.5rem; color: #555;">';
+        strategyData.steps.forEach(step => {
+            stepsHTML += `<li style="margin-bottom: 0.8rem; line-height: 1.6;">${step}</li>`;
+        });
+        stepsHTML += '</ol>';
+        strategySteps.innerHTML = stepsHTML;
+        strategyOverlay.classList.add('active');
+        strategyModal.classList.add('active');
+    } else {
+        // No modal; complete strategy immediately
+        completeStrategy();
+    }
+}
+
+/**
+ * Close the strategy modal and reset the current strategy.
+ */
+function closeStrategyModal() {
+    if (strategyOverlay) strategyOverlay.classList.remove('active');
+    if (strategyModal) strategyModal.classList.remove('active');
+    currentStrategy = null;
+}
+
+/**
+ * Complete the current strategy by adjusting slider values and showing
+ * a toast notification. Handles the absence of the modal gracefully.
+ */
+function completeStrategy() {
+    if (!currentStrategy) return;
+    const { type } = currentStrategy;
+    if (type === 'motivation') {
+        if (motivationSlider) {
+            const newVal = Math.min(100, parseInt(motivationSlider.value || 0) + 10);
+            motivationSlider.value = newVal;
+        }
+    } else if (type === 'focus') {
+        if (focusSlider) {
+            const newVal = Math.min(100, parseInt(focusSlider.value || 0) + 10);
+            focusSlider.value = newVal;
+        }
+    } else if (type === 'stress') {
+        if (stressSlider) {
+            const newVal = Math.max(0, parseInt(stressSlider.value || 0) - 10);
+            stressSlider.value = newVal;
+        }
+    }
+    updateDisplayValues();
+    showToast('🎉 Great job completing the strategy!');
+    closeStrategyModal();
+}
+
+// Attach event listeners to strategy buttons if present
+const strategyButtons = document.querySelectorAll('.strategy-btn');
+if (strategyButtons) {
+    strategyButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const type = e.currentTarget.dataset.type;
+            const strat = e.currentTarget.dataset.strategy;
+            openStrategyModal(type, strat);
+        });
+    });
+}
+
+// Attach modal control handlers if modal elements exist
+if (completeStrategyBtn) {
+    completeStrategyBtn.addEventListener('click', completeStrategy);
+}
+if (closeStrategyBtn) {
+    closeStrategyBtn.addEventListener('click', closeStrategyModal);
+}
+if (strategyOverlay) {
+    strategyOverlay.addEventListener('click', closeStrategyModal);
+}
+
+// Extend existing keydown handler to close strategy modal with Escape and handle modal save
+document.addEventListener('keydown', (e) => {
+    // Already handle journal modal in previous handler; add strategy modal check
+    if (e.key === 'Escape' && strategyModal && strategyModal.classList.contains('active')) {
+        closeStrategyModal();
+    }
+});
