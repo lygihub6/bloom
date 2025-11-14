@@ -295,14 +295,14 @@ body {
 .strategy-text {
     font-size: 15px;            /* was 12px — bigger name */
     font-weight: 600;
-    color: #4b5563;
+    color: #2596be;
     text-align: center;
 }
 
 .strategy-number {
     font-size: 13px;            /* was 18px — smaller metric */
     font-weight: 600;           /* a bit lighter than 700 if you like */
-    color: #7c3aed;
+    color: #FF9913;
 }
 
 
