@@ -1,158 +1,25 @@
-// app.js - Enhanced application logic with strategy guidance
+// app.js - Main application logic for UI integration
 
-// Strategy definitions
-const strategies = {
-    motivation: {
-        exercise: {
-            title: "🏃 Take a Walk",
-            description: "Physical movement is one of the quickest ways to boost your motivation and energy levels.",
-            steps: [
-                "Stand up and stretch for 30 seconds",
-                "Put on comfortable shoes",
-                "Step outside or find a walking path",
-                "Walk briskly for 10-15 minutes",
-                "Focus on your breathing and surroundings",
-                "Notice how your body feels energized"
-            ]
-        },
-        music: {
-            title: "🎵 Play Energizing Music",
-            description: "Music can instantly shift your mood and boost motivation.",
-            steps: [
-                "Choose upbeat, positive music you enjoy",
-                "Set volume to a comfortable level",
-                "Close your eyes and listen for 1-2 songs",
-                "Move your body to the rhythm if you feel like it",
-                "Sing along if you know the words",
-                "Feel the energy flowing through you"
-            ]
-        },
-        reward: {
-            title: "🎯 Set a Small Goal",
-            description: "Achieving small wins builds momentum for bigger accomplishments.",
-            steps: [
-                "Choose one simple task (5-10 minutes)",
-                "Write it down clearly",
-                "Break it into 3 tiny steps",
-                "Complete step 1 right now",
-                "Celebrate this small win",
-                "Use the momentum to continue"
-            ]
-        },
-        social: {
-            title: "💬 Connect with Someone",
-            description: "Social connection can provide instant motivation and support.",
-            steps: [
-                "Think of someone who energizes you",
-                "Send them a quick message or call",
-                "Share one positive thing from today",
-                "Ask them about their day",
-                "Plan something fun together",
-                "Thank them for their time"
-            ]
-        }
-    },
-    focus: {
-        pomodoro: {
-            title: "⏰ Start a Focus Session",
-            description: "The Pomodoro Technique helps maintain concentration through structured work periods.",
-            steps: [
-                "Choose one specific task to focus on",
-                "Set a timer for 25 minutes",
-                "Work on only this task",
-                "When timer rings, take a 5-minute break",
-                "Stretch, breathe, or get water",
-                "Repeat for another session if needed"
-            ]
-        },
-        clean: {
-            title: "🧹 Clear Your Space",
-            description: "A tidy environment promotes a clear, focused mind.",
-            steps: [
-                "Look at your immediate workspace",
-                "Remove any trash or dishes",
-                "Organize papers and supplies",
-                "Wipe down surfaces",
-                "Put away 3 distracting items",
-                "Take a deep breath in your clean space"
-            ]
-        },
-        break: {
-            title: "☕ Take a Mindful Break",
-            description: "Strategic breaks actually improve focus when you return to work.",
-            steps: [
-                "Step away from your current task",
-                "Make a warm beverage or get water",
-                "Look out a window for 60 seconds",
-                "Do 5 shoulder rolls backward",
-                "Take 5 deep, slow breaths",
-                "Return to work with fresh perspective"
-            ]
-        },
-        list: {
-            title: "📝 Create a Priority List",
-            description: "Writing down tasks clears mental clutter and improves focus.",
-            steps: [
-                "Get a piece of paper or open notes app",
-                "Brain dump all tasks on your mind",
-                "Circle the 3 most important ones",
-                "Number them in priority order",
-                "Put the list where you can see it",
-                "Focus only on item #1 for now"
-            ]
-        }
-    },
-    stress: {
-        breathe: {
-            title: "🌬️ Practice Deep Breathing",
-            description: "Controlled breathing activates your body's relaxation response.",
-            steps: [
-                "Sit comfortably with feet flat on floor",
-                "Place one hand on chest, one on belly",
-                "Inhale slowly through nose for 4 counts",
-                "Hold breath gently for 4 counts",
-                "Exhale through mouth for 6 counts",
-                "Repeat this cycle 5-10 times"
-            ]
-        },
-        meditate: {
-            title: "🧘 Quick Meditation",
-            description: "Even brief meditation can significantly reduce stress levels.",
-            steps: [
-                "Find a quiet spot and sit comfortably",
-                "Close your eyes or soften your gaze",
-                "Notice your natural breathing",
-                "When thoughts arise, acknowledge them",
-                "Gently return focus to your breath",
-                "Continue for 5-10 minutes"
-            ]
-        },
-        journal: {
-            title: "📖 Express Your Feelings",
-            description: "Writing helps process emotions and reduce stress.",
-            steps: [
-                "Get paper or open a notes app",
-                "Write 'I feel...' and complete the sentence",
-                "Don't judge, just let words flow",
-                "Describe what triggered these feelings",
-                "Write one thing you're grateful for",
-                "Close with one kind message to yourself"
-            ]
-        },
-        nature: {
-            title: "🌿 Connect with Nature",
-            description: "Nature exposure quickly reduces cortisol and stress levels.",
-            steps: [
-                "Step outside or find a window",
-                "Look at something green or natural",
-                "Take 10 slow, deep breaths of fresh air",
-                "Notice 3 things you can see in nature",
-                "Listen for natural sounds",
-                "Feel the air or sun on your skin"
-            ]
-        }
+// Update date and time
+function updateDateTime() {
+    const now = new Date();
+    const options = { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric', 
+        hour: '2-digit', 
+        minute: '2-digit' 
+    };
+    const dateTimeElement = document.getElementById('dateTime');
+    if (dateTimeElement) {
+        dateTimeElement.textContent = now.toLocaleDateString('en-US', options);
     }
-};
+}
+
+// Initialize date/time and update every minute
+updateDateTime();
+setInterval(updateDateTime, 60000);
 
 // Slider event handlers
 const motivationSlider = document.getElementById('motivationSlider');
@@ -160,132 +27,98 @@ const focusSlider = document.getElementById('focusSlider');
 const stressSlider = document.getElementById('stressSlider');
 
 // Update display values when sliders change
+// This function is resilient to missing elements, since different UI layouts may
+// omit or rename certain fields. Each element is checked for existence before
+// being updated. The Calm value is derived from the Stress slider (100 - stress)
+// if both the stress slider and calm element exist.
 function updateDisplayValues() {
-    const motivation = parseInt(motivationSlider.value);
-    const focus = parseInt(focusSlider.value);
-    const stress = parseInt(stressSlider.value);
-    
-    // Update stat display
-    document.getElementById('motivationValue').textContent = motivation;
-    document.getElementById('focusValue').textContent = focus;
-    document.getElementById('calmValue').textContent = 100 - stress;
-    
-    // Update slider labels
-    document.getElementById('motivationSliderValue').textContent = motivation;
-    document.getElementById('focusSliderValue').textContent = focus;
-    document.getElementById('stressSliderValue').textContent = stress;
-    
-    // Update slider gradients
-    motivationSlider.style.setProperty('--value', `${motivation}%`);
-    focusSlider.style.setProperty('--value', `${focus}%`);
-    stressSlider.style.setProperty('--value', `${stress}%`);
-}
+    // Parse numeric values from the sliders; guard against null references
+    const motVal = motivationSlider ? parseInt(motivationSlider.value) : 0;
+    const focVal = focusSlider ? parseInt(focusSlider.value) : 0;
+    const strVal = stressSlider ? parseInt(stressSlider.value) : 0;
 
-// Initialize slider gradients
-function initSliderGradients() {
-    motivationSlider.style.background = `linear-gradient(to right, #e5e7eb 0%, #e5e7eb ${motivationSlider.value}%, #fbbf24 ${motivationSlider.value}%, #fbbf24 100%)`;
-    focusSlider.style.background = `linear-gradient(to right, #e5e7eb 0%, #e5e7eb ${focusSlider.value}%, #10b981 ${focusSlider.value}%, #10b981 100%)`;
-    stressSlider.style.background = `linear-gradient(to right, #10b981 0%, #10b981 ${100 - stressSlider.value}%, #e5e7eb ${100 - stressSlider.value}%, #ef4444 ${stressSlider.value}%, #ef4444 100%)`;
-}
+    // Update the numeric display in the Current Mood card
+    const motDisplay = document.getElementById('motivationValue');
+    if (motDisplay) motDisplay.textContent = motVal;
+    const focDisplay = document.getElementById('focusValue');
+    if (focDisplay) focDisplay.textContent = focVal;
+    const calmDisplay = document.getElementById('calmValue');
+    if (calmDisplay) calmDisplay.textContent = Math.max(0, 100 - strVal);
 
-// Update slider gradients on input
-motivationSlider.addEventListener('input', function() {
-    this.style.background = `linear-gradient(to right, #e5e7eb 0%, #e5e7eb ${this.value}%, #fbbf24 ${this.value}%, #fbbf24 100%)`;
-    updateDisplayValues();
-});
+    // Update slider value labels next to each slider
+    const motSliderValEl = document.getElementById('motivationSliderValue');
+    if (motSliderValEl) motSliderValEl.textContent = motVal;
+    const focSliderValEl = document.getElementById('focusSliderValue');
+    if (focSliderValEl) focSliderValEl.textContent = focVal;
+    const strSliderValEl = document.getElementById('stressSliderValue');
+    if (strSliderValEl) strSliderValEl.textContent = strVal;
 
-focusSlider.addEventListener('input', function() {
-    this.style.background = `linear-gradient(to right, #e5e7eb 0%, #e5e7eb ${this.value}%, #10b981 ${this.value}%, #10b981 100%)`;
-    updateDisplayValues();
-});
-
-stressSlider.addEventListener('input', function() {
-    const val = this.value;
-    if (val <= 30) {
-        this.style.background = `linear-gradient(to right, #10b981 0%, #10b981 ${100 - val}%, #e5e7eb ${100 - val}%, #fbbf24 ${val}%, #fbbf24 100%)`;
-    } else {
-        this.style.background = `linear-gradient(to right, #10b981 0%, #10b981 ${100 - val}%, #e5e7eb ${100 - val}%, #ef4444 ${val}%, #ef4444 100%)`;
+    // Optionally update the slider gradients for visual feedback, if CSS custom properties are used
+    if (motivationSlider) {
+        motivationSlider.style.setProperty('--value', `${motVal}%`);
     }
-    updateDisplayValues();
-});
+    if (focusSlider) {
+        focusSlider.style.setProperty('--value', `${focVal}%`);
+    }
+    if (stressSlider) {
+        stressSlider.style.setProperty('--value', `${strVal}%`);
+    }
+}
+
+// Add event listeners to sliders.  Check existence to avoid errors if a slider
+// element is missing from the DOM (for example, in a simplified layout).
+if (motivationSlider) {
+    motivationSlider.addEventListener('input', updateDisplayValues);
+}
+if (focusSlider) {
+    focusSlider.addEventListener('input', updateDisplayValues);
+}
+if (stressSlider) {
+    stressSlider.addEventListener('input', updateDisplayValues);
+}
 
 // Journal Modal functionality
+// These elements may not exist if the UI has been simplified to log without a modal.
 const journalOverlay = document.getElementById('journalOverlay');
 const journalModal = document.getElementById('journalModal');
 const journalText = document.getElementById('journalText');
 const saveJournalBtn = document.getElementById('saveJournal');
 const cancelJournalBtn = document.getElementById('cancelJournal');
 
+/**
+ * Open the journal modal if it exists. If no modal is present, log the mood
+ * immediately using the current slider values and an empty note. This allows
+ * the "Log Mood" button to work regardless of whether the reflection UI
+ * (modal + overlay) is included in the page.
+ */
 function openJournalModal() {
-    journalOverlay.classList.add('active');
-    journalModal.classList.add('active');
-    journalText.focus();
-}
-
-function closeJournalModal() {
-    journalOverlay.classList.remove('active');
-    journalModal.classList.remove('active');
-    journalText.value = '';
-}
-
-// Strategy Modal functionality
-const strategyOverlay = document.getElementById('strategyOverlay');
-const strategyModal = document.getElementById('strategyModal');
-const strategyTitle = document.getElementById('strategyTitle');
-const strategyDescription = document.getElementById('strategyDescription');
-const strategySteps = document.getElementById('strategySteps');
-const completeStrategyBtn = document.getElementById('completeStrategy');
-const closeStrategyBtn = document.getElementById('closeStrategy');
-
-let currentStrategy = null;
-
-function openStrategyModal(type, strategy) {
-    const strategyData = strategies[type][strategy];
-    if (!strategyData) return;
-
-    currentStrategy = { type, strategy };
-    
-    strategyTitle.textContent = strategyData.title;
-    strategyDescription.textContent = strategyData.description;
-    
-    // Create steps list
-    let stepsHTML = '<ol style="margin: 0; padding-left: 1.5rem; color: #555;">';
-    strategyData.steps.forEach(step => {
-        stepsHTML += `<li style="margin-bottom: 0.8rem; line-height: 1.6;">${step}</li>`;
-    });
-    stepsHTML += '</ol>';
-    strategySteps.innerHTML = stepsHTML;
-    
-    strategyOverlay.classList.add('active');
-    strategyModal.classList.add('active');
-}
-
-function closeStrategyModal() {
-    strategyOverlay.classList.remove('active');
-    strategyModal.classList.remove('active');
-    currentStrategy = null;
-}
-
-// Handle strategy completion
-function completeStrategy() {
-    if (currentStrategy) {
-        // Adjust mood based on strategy type
-        if (currentStrategy.type === 'motivation') {
-            motivationSlider.value = Math.min(100, parseInt(motivationSlider.value) + 10);
-        } else if (currentStrategy.type === 'focus') {
-            focusSlider.value = Math.min(100, parseInt(focusSlider.value) + 10);
-        } else if (currentStrategy.type === 'stress') {
-            stressSlider.value = Math.max(0, parseInt(stressSlider.value) - 10);
-        }
-        
-        updateDisplayValues();
-        showToast('🎉 Great job completing the strategy!');
+    // If both overlay and modal exist, show them and focus the textarea
+    if (journalOverlay && journalModal && journalText) {
+        journalOverlay.classList.add('active');
+        journalModal.classList.add('active');
+        journalText.focus();
+    } else {
+        // No modal present — log the mood immediately without a note
+        saveMoodWithJournal();
     }
-    closeStrategyModal();
+}
+
+/**
+ * Close the journal modal if it exists. Clears the journal textarea when
+ * closing. Safe to call even when the modal elements are missing.
+ */
+function closeJournalModal() {
+    if (journalOverlay) journalOverlay.classList.remove('active');
+    if (journalModal) journalModal.classList.remove('active');
+    if (journalText) journalText.value = '';
 }
 
 // Save mood with journal entry
 function saveMoodWithJournal() {
+    // Gracefully handle the case where the journal textarea is absent
+    const noteValue = journalText ? journalText.value : '';
+    const now = Date.now();
+
     const moodData = {
         motivation: parseInt(motivationSlider.value),
         focus: parseInt(focusSlider.value),
@@ -293,20 +126,20 @@ function saveMoodWithJournal() {
         mot: parseInt(motivationSlider.value), // for p5.js compatibility
         foc: parseInt(focusSlider.value),
         st: parseInt(stressSlider.value),
-        note: journalText.value,
-        timestamp: Date.now(),
-        t: Date.now(),
-        createdAt: new Date().toISOString()
+        note: noteValue,
+        timestamp: now,
+        t: now,
+        createdAt: new Date(now).toISOString()
     };
     
-    // Get existing history or create new array
+    // Get existing history from localStorage
     let history = [];
     const savedHistory = localStorage.getItem('moodHistory');
     if (savedHistory) {
         try {
             history = JSON.parse(savedHistory);
         } catch (e) {
-            console.error('Error parsing saved history:', e);
+            console.error('Error parsing mood history:', e);
         }
     }
     
@@ -343,19 +176,19 @@ function updateHistoryDisplay() {
     const savedHistory = localStorage.getItem('moodHistory');
     
     if (!savedHistory) {
-        historyContent.innerHTML = '<p class="no-logs">No mood logs yet</p>';
+        historyContent.innerHTML = 'No mood logs yet';
         return;
     }
     
     try {
         const history = JSON.parse(savedHistory);
         if (history.length === 0) {
-            historyContent.innerHTML = '<p class="no-logs">No mood logs yet</p>';
+            historyContent.innerHTML = 'No mood logs yet';
             return;
         }
         
-        // Show last 3 entries (most recent first)
-        const recentEntries = history.slice(-3).reverse();
+        // Show last 5 entries (most recent first)
+        const recentEntries = history.slice(-5).reverse();
         let html = '';
         
         recentEntries.forEach((entry, index) => {
@@ -377,18 +210,22 @@ function updateHistoryDisplay() {
                     <div class="history-item-mood">
                         <span>💪 ${mot}</span>
                         <span>🎯 ${foc}</span>
-                        <span>🔥 ${st}</span>
+                        <span>😰 ${st}</span>
                     </div>
                     ${entry.note ? `<div class="history-item-note">"${entry.note.substring(0, 50)}${entry.note.length > 50 ? '...' : ''}"</div>` : ''}
                 </div>
             `;
         });
         
+        html += `<div style="margin-top: 1rem; font-size: 0.85rem; color: #999;">
+                    Total logs: ${history.length}
+                </div>`;
+        
         historyContent.innerHTML = html;
         
     } catch (e) {
         console.error('Error displaying history:', e);
-        historyContent.innerHTML = '<p class="no-logs">Error loading history</p>';
+        historyContent.innerHTML = 'Error loading history';
     }
 }
 
@@ -410,6 +247,12 @@ function clearAllLogs() {
 // Toast notification
 function showToast(message) {
     const toast = document.getElementById('toast');
+    // If the toast element is missing from the page, fall back to a simple alert.
+    if (!toast) {
+        // Only use alert as a fallback; avoid errors when no toast container exists.
+        alert(message);
+        return;
+    }
     toast.textContent = message;
     toast.classList.add('active');
     
@@ -419,46 +262,53 @@ function showToast(message) {
 }
 
 // Button event handlers
-document.getElementById('logMoodBtn').addEventListener('click', openJournalModal);
-document.getElementById('clearLogBtn').addEventListener('click', clearAllLogs);
-saveJournalBtn.addEventListener('click', saveMoodWithJournal);
-cancelJournalBtn.addEventListener('click', closeJournalModal);
-completeStrategyBtn.addEventListener('click', completeStrategy);
-closeStrategyBtn.addEventListener('click', closeStrategyModal);
+// Attach handlers only if the elements exist. This prevents errors when the
+// journal modal is not present in the DOM (e.g., simplified UI without reflection).
+let logMoodBtnEl = document.getElementById('logMoodBtn');
+// Fall back to a button whose text contains "log mood" if the expected ID isn't found.
+if (!logMoodBtnEl) {
+    const allButtons = Array.from(document.getElementsByTagName('button'));
+    logMoodBtnEl = allButtons.find(btn => /log\s*mood/i.test(btn.textContent));
+}
+if (logMoodBtnEl) {
+    logMoodBtnEl.addEventListener('click', openJournalModal);
+}
+let clearLogBtnEl = document.getElementById('clearLogBtn');
+// Fall back to a button whose text contains "clear log" if the expected ID isn't found.
+if (!clearLogBtnEl) {
+    const allButtons = Array.from(document.getElementsByTagName('button'));
+    clearLogBtnEl = allButtons.find(btn => /clear\s*log/i.test(btn.textContent));
+}
+if (clearLogBtnEl) {
+    clearLogBtnEl.addEventListener('click', clearAllLogs);
+}
+if (saveJournalBtn) {
+    saveJournalBtn.addEventListener('click', saveMoodWithJournal);
+}
+if (cancelJournalBtn) {
+    cancelJournalBtn.addEventListener('click', closeJournalModal);
+}
 
-// Strategy button event handlers
-document.querySelectorAll('.strategy-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-        const type = e.currentTarget.dataset.type;
-        const strategy = e.currentTarget.dataset.strategy;
-        openStrategyModal(type, strategy);
-    });
-});
-
-// Close modals with Escape key
+// Close modal with Escape key and save with Ctrl/Cmd + Enter when modal is active
 document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-        if (journalModal.classList.contains('active')) {
-            closeJournalModal();
-        }
-        if (strategyModal.classList.contains('active')) {
-            closeStrategyModal();
-        }
+    // Close only if journalModal exists and is active
+    if (e.key === 'Escape' && journalModal && journalModal.classList.contains('active')) {
+        closeJournalModal();
     }
-    // Save journal with Ctrl/Cmd + Enter
-    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter' && journalModal.classList.contains('active')) {
+    // Save with Ctrl/Cmd + Enter when modal is active
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter' && journalModal && journalModal.classList.contains('active')) {
         saveMoodWithJournal();
     }
 });
 
-// Close modals when clicking overlay
-journalOverlay.addEventListener('click', closeJournalModal);
-strategyOverlay.addEventListener('click', closeStrategyModal);
+// Close modal when clicking overlay (if overlay exists)
+if (journalOverlay) {
+    journalOverlay.addEventListener('click', closeJournalModal);
+}
 
 // Initialize display
 updateDisplayValues();
 updateHistoryDisplay();
-initSliderGradients();
 
 // Refresh history display every 30 seconds
 setInterval(updateHistoryDisplay, 30000);
