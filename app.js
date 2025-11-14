@@ -21,10 +21,14 @@ function updateDateTime() {
 updateDateTime();
 setInterval(updateDateTime, 60000);
 
-// Slider elements (will be set after DOM is ready)
-let motivationSlider = null;
-let focusSlider = null;
-let stressSlider = null;
+// Slider element references.
+// These are deliberately named differently from the variables used in the p5.js sketch
+// to avoid redeclaration errors across scripts (sketch.js declares its own
+// `motivationSlider`, `focusSlider`, and `stressSlider`). We initialise these
+// later once the DOM is ready.
+let motivationSliderEl = null;
+let focusSliderEl = null;
+let stressSliderEl = null;
 
 // Update display values when sliders change
 // This function is resilient to missing elements, since different UI layouts may
@@ -33,9 +37,9 @@ let stressSlider = null;
 // if both the stress slider and calm element exist.
 function updateDisplayValues() {
     // Parse numeric values from the sliders; guard against null references
-    const motVal = motivationSlider ? parseInt(motivationSlider.value) : 0;
-    const focVal = focusSlider ? parseInt(focusSlider.value) : 0;
-    const strVal = stressSlider ? parseInt(stressSlider.value) : 0;
+    const motVal = motivationSliderEl ? parseInt(motivationSliderEl.value) : 0;
+    const focVal = focusSliderEl ? parseInt(focusSliderEl.value) : 0;
+    const strVal = stressSliderEl ? parseInt(stressSliderEl.value) : 0;
 
     // Update the numeric display in the Current Mood card
     const motDisplay = document.getElementById('motivationValue');
@@ -54,34 +58,38 @@ function updateDisplayValues() {
     if (strSliderValEl) strSliderValEl.textContent = strVal;
 
     // Optionally update the slider gradients for visual feedback, if CSS custom properties are used
-    if (motivationSlider) {
-        motivationSlider.style.setProperty('--value', `${motVal}%`);
+    if (motivationSliderEl) {
+        motivationSliderEl.style.setProperty('--value', `${motVal}%`);
     }
-    if (focusSlider) {
-        focusSlider.style.setProperty('--value', `${focVal}%`);
+    if (focusSliderEl) {
+        focusSliderEl.style.setProperty('--value', `${focVal}%`);
     }
-    if (stressSlider) {
-        stressSlider.style.setProperty('--value', `${strVal}%`);
+    if (stressSliderEl) {
+        stressSliderEl.style.setProperty('--value', `${strVal}%`);
     }
 }
 
-// Initialize sliders after DOM is loaded
+// Initialise sliders and attach listeners once the DOM is fully loaded.
 function initSliders() {
-    motivationSlider = document.getElementById('motivationSlider');
-    focusSlider      = document.getElementById('focusSlider');
-    stressSlider     = document.getElementById('stressSlider');
+    // Grab the slider elements now that the DOM is ready. Using unique names
+    // prevents collisions with the variables in sketch.js.
+    motivationSliderEl = document.getElementById('motivationSlider');
+    focusSliderEl      = document.getElementById('focusSlider');
+    stressSliderEl     = document.getElementById('stressSlider');
 
-    if (motivationSlider) {
-        motivationSlider.addEventListener('input', updateDisplayValues);
+    // Attach 'input' listeners to update the display whenever a value changes.
+    // Guard each attachment in case a slider is omitted in a simplified layout.
+    if (motivationSliderEl) {
+        motivationSliderEl.addEventListener('input', updateDisplayValues);
     }
-    if (focusSlider) {
-        focusSlider.addEventListener('input', updateDisplayValues);
+    if (focusSliderEl) {
+        focusSliderEl.addEventListener('input', updateDisplayValues);
     }
-    if (stressSlider) {
-        stressSlider.addEventListener('input', updateDisplayValues);
+    if (stressSliderEl) {
+        stressSliderEl.addEventListener('input', updateDisplayValues);
     }
 
-    // Sync the numbers with whatever the sliders start at
+    // Immediately sync display values with whatever the sliders start at.
     updateDisplayValues();
 }
 
@@ -128,12 +136,13 @@ function saveMoodWithJournal() {
     const now = Date.now();
 
     const moodData = {
-        motivation: parseInt(motivationSlider.value),
-        focus: parseInt(focusSlider.value),
-        stress: parseInt(stressSlider.value),
-        mot: parseInt(motivationSlider.value), // for p5.js compatibility
-        foc: parseInt(focusSlider.value),
-        st: parseInt(stressSlider.value),
+        motivation: motivationSliderEl ? parseInt(motivationSliderEl.value) : 0,
+        focus:      focusSliderEl ? parseInt(focusSliderEl.value) : 0,
+        stress:     stressSliderEl ? parseInt(stressSliderEl.value) : 0,
+        // Duplicate values for p5.js compatibility
+        mot: motivationSliderEl ? parseInt(motivationSliderEl.value) : 0,
+        foc: focusSliderEl ? parseInt(focusSliderEl.value) : 0,
+        st:  stressSliderEl ? parseInt(stressSliderEl.value) : 0,
         note: noteValue,
         timestamp: now,
         t: now,
@@ -199,7 +208,7 @@ function updateHistoryDisplay() {
         const recentEntries = history.slice(-5).reverse();
         let html = '';
         
-             recentEntries.forEach((entry, index) => {
+        recentEntries.forEach((entry, index) => {
             const date = new Date(entry.createdAt || entry.timestamp);
             const timeStr = date.toLocaleString('en-US', { 
                 month: 'short', 
@@ -210,9 +219,7 @@ function updateHistoryDisplay() {
             
             const mot = entry.motivation || entry.mot || 0;
             const foc = entry.focus || entry.foc || 0;
-            const st  = entry.stress || entry.st || 0;
-            const note = (entry.note || '').trim();
-            const shortNote = note.length > 80 ? note.substring(0, 80) + '…' : note;
+            const st = entry.stress || entry.st || 0;
             
             html += `
                 <div class="history-item">
@@ -222,7 +229,7 @@ function updateHistoryDisplay() {
                         <span>🎯 ${foc}</span>
                         <span>😰 ${st}</span>
                     </div>
-                    ${note ? `<div class="history-item-note">${shortNote}</div>` : ''}
+                    ${entry.note ? `<div class="history-item-note">"${entry.note.substring(0, 50)}${entry.note.length > 50 ? '...' : ''}"</div>` : ''}
                 </div>
             `;
         });
@@ -232,7 +239,6 @@ function updateHistoryDisplay() {
                 </div>`;
         
         historyContent.innerHTML = html;
-
         
     } catch (e) {
         console.error('Error displaying history:', e);
@@ -317,11 +323,17 @@ if (journalOverlay) {
     journalOverlay.addEventListener('click', closeJournalModal);
 }
 
-// Initialize once DOM is ready
+// Initialise sliders and history display once the DOM is ready. Without waiting
+// for DOMContentLoaded the slider elements may be undefined, leading to
+// listeners not attaching and the display not updating. We also refresh
+// the history display immediately on load.
 document.addEventListener('DOMContentLoaded', () => {
     initSliders();
     updateHistoryDisplay();
 });
+
+// Refresh the history display every 30 seconds to surface newly logged moods.
+setInterval(updateHistoryDisplay, 30000);
 
 /*
  * Strategy functionality
@@ -537,19 +549,19 @@ function completeStrategy() {
     if (!currentStrategy) return;
     const { type } = currentStrategy;
     if (type === 'motivation') {
-        if (motivationSlider) {
-            const newVal = Math.min(100, parseInt(motivationSlider.value || 0) + 10);
-            motivationSlider.value = newVal;
+        if (motivationSliderEl) {
+            const newVal = Math.min(100, parseInt(motivationSliderEl.value || 0) + 10);
+            motivationSliderEl.value = newVal;
         }
     } else if (type === 'focus') {
-        if (focusSlider) {
-            const newVal = Math.min(100, parseInt(focusSlider.value || 0) + 10);
-            focusSlider.value = newVal;
+        if (focusSliderEl) {
+            const newVal = Math.min(100, parseInt(focusSliderEl.value || 0) + 10);
+            focusSliderEl.value = newVal;
         }
     } else if (type === 'stress') {
-        if (stressSlider) {
-            const newVal = Math.max(0, parseInt(stressSlider.value || 0) - 10);
-            stressSlider.value = newVal;
+        if (stressSliderEl) {
+            const newVal = Math.max(0, parseInt(stressSliderEl.value || 0) - 10);
+            stressSliderEl.value = newVal;
         }
     }
     updateDisplayValues();
@@ -587,3 +599,4 @@ document.addEventListener('keydown', (e) => {
         closeStrategyModal();
     }
 });
+
