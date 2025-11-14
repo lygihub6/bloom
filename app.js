@@ -191,7 +191,7 @@ function updateHistoryDisplay() {
         const recentEntries = history.slice(-5).reverse();
         let html = '';
         
-        recentEntries.forEach((entry, index) => {
+             recentEntries.forEach((entry, index) => {
             const date = new Date(entry.createdAt || entry.timestamp);
             const timeStr = date.toLocaleString('en-US', { 
                 month: 'short', 
@@ -202,7 +202,9 @@ function updateHistoryDisplay() {
             
             const mot = entry.motivation || entry.mot || 0;
             const foc = entry.focus || entry.foc || 0;
-            const st = entry.stress || entry.st || 0;
+            const st  = entry.stress || entry.st || 0;
+            const note = (entry.note || '').trim();
+            const shortNote = note.length > 80 ? note.substring(0, 80) + '…' : note;
             
             html += `
                 <div class="history-item">
@@ -212,7 +214,7 @@ function updateHistoryDisplay() {
                         <span>🎯 ${foc}</span>
                         <span>😰 ${st}</span>
                     </div>
-                    ${entry.note ? `<div class="history-item-note">"${entry.note.substring(0, 50)}${entry.note.length > 50 ? '...' : ''}"</div>` : ''}
+                    ${note ? `<div class="history-item-note">${shortNote}</div>` : ''}
                 </div>
             `;
         });
@@ -222,6 +224,7 @@ function updateHistoryDisplay() {
                 </div>`;
         
         historyContent.innerHTML = html;
+
         
     } catch (e) {
         console.error('Error displaying history:', e);
