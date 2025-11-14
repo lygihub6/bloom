@@ -53,28 +53,44 @@ let petals = [];
 // Get HTML elements
 let motivationSlider, focusSlider, stressSlider;
 
+// Global state values used in draw().
+// Without explicit declarations these would be implicit globals, which
+// can cause ReferenceError in strict environments. Define sensible defaults.
+let motivation = 50;
+let focus = 50;
+let stress = 0;
+let t = 0;
+
 function setup() {
-  // Create canvas in the specific container
+  // Create canvas in the specific container and attach to the DOM.  
+  // Without properly closing the setup function, subsequent initialisation lines
+  // would execute in the global scope and cause syntax errors. By moving all
+  // initialisation into the setup block we ensure p5.js runs correctly.
   let canvas = createCanvas(400, 500);
   canvas.parent('p5-container');
-  if (window.p5ReloadMoodHistory) window.p5ReloadMoodHistory();
-}
+
+  // Reload any saved mood history for the timeline if the helper exists.  
+  if (typeof window.p5ReloadMoodHistory === 'function') {
+    window.p5ReloadMoodHistory();
+  }
+
+  // Set HSB colour mode and disable outlines.  
   colorMode(HSB, 360, 100, 100, 100);
   noStroke();
-  
-  // Connect to HTML sliders instead of creating new ones
+
+  // Connect to existing HTML range inputs instead of creating new ones.  
   motivationSlider = select('#motivationSlider');
   focusSlider = select('#focusSlider');
   stressSlider = select('#stressSlider');
-  
-  // Load saved mood log from localStorage if exists
+
+  // Load saved mood log from localStorage if it exists.  
   const savedLog = localStorage.getItem('moodHistory');
   if (savedLog) {
     try {
-      moodLog = JSON.parse(savedLog);
-      // Keep only recent entries
-      if (moodLog.length > MAX_LOG) {
-        moodLog = moodLog.slice(-MAX_LOG);
+      const parsed = JSON.parse(savedLog);
+      if (Array.isArray(parsed)) {
+        // Keep only recent entries
+        moodLog = parsed.slice(-MAX_LOG);
       }
     } catch (e) {
       console.log('Could not load mood history');
