@@ -398,6 +398,20 @@ const strategies = {
                 "Offer support in return",
                 "Stay accountable"
             ]
+        },
+
+        // Additional Motivation Strategy
+        visualizeSuccess: {
+            title: "🏆 Visualize Success",
+            description: "Imagine yourself achieving your goals to inspire motivation.",
+            steps: [
+                "Sit comfortably and close your eyes",
+                "Picture yourself completing a meaningful goal",
+                "Imagine the positive feelings and outcomes",
+                "Note specific actions you took to get there",
+                "Breathe deeply and hold onto that image",
+                "Carry that motivation into your work"
+            ]
         }
     },
     focus: {
@@ -448,6 +462,20 @@ const strategies = {
                 "Let the music keep you on track",
                 "Take breaks as needed"
             ]
+        },
+
+        // Additional Focus Strategy
+        writeTodoList: {
+            title: "📝 Write a To‑Do List",
+            description: "Creating a clear list of tasks helps organize your thoughts and improve focus.",
+            steps: [
+                "List everything you need to accomplish",
+                "Prioritize tasks by importance",
+                "Break large tasks into smaller steps",
+                "Review the list and adjust as needed",
+                "Start with the highest priority item",
+                "Check off tasks as you complete them"
+            ]
         }
     },
     stress: {
@@ -485,6 +513,32 @@ const strategies = {
                 "Share a few laughs or positive thoughts",
                 "Thank them for their support",
                 "Continue your day with a lighter mood"
+            ]
+        },
+
+        // Additional Stress Strategies
+        listenCalmMusic: {
+            title: "🎵 Calming Music",
+            description: "Listening to soothing music can lower stress levels and promote relaxation.",
+            steps: [
+                "Choose a calming playlist",
+                "Play the music at a comfortable volume",
+                "Close your eyes and focus on the melody",
+                "Breathe deeply and relax your muscles",
+                "Allow any tension to melt away",
+                "Continue listening until you feel calmer"
+            ]
+        },
+        stretchBreak: {
+            title: "🧘 Stretch Break",
+            description: "Stretching helps release physical tension and clears your mind.",
+            steps: [
+                "Stand up and gently stretch your arms above your head",
+                "Roll your shoulders to relieve tension",
+                "Stretch your neck and back slowly",
+                "Hold each stretch for 15–30 seconds",
+                "Shake out your limbs and take a deep breath",
+                "Return to your task feeling refreshed"
             ]
         }
     }
