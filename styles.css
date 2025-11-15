@@ -55,7 +55,7 @@ body {
 }
 
 #p5-container canvas {
-    border-radius: 15px;
+    border-radius: 18px;
 }
 
 /* Current Mood Card */
@@ -166,7 +166,7 @@ body {
 .slider-title {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
 }
 
 .slider-emoji {
@@ -198,13 +198,13 @@ body {
 }
 
 .slider-value {
-    font-size: 32px;
+    font-size: 28px;
     font-weight: 700;
     color: #7c3aed;
 }
 
 .slider-description {
-    font-size: 13px;
+    font-size: 15px;
     color: #6b7280;
     margin-bottom: 6px;
 }
@@ -269,20 +269,20 @@ body {
 .strategies-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 10px;                  /* was 12px */
+    gap: 12px;                 
 }
 
 .strategy-btn {
     background: white;
     border: 2px solid #e5e7eb;
     border-radius: 12px;
-    padding: 12px 10px;         /* was 16px 12px */
+    padding: 12px 10px;        
     cursor: pointer;
     transition: all 0.3s ease;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 4px;                   /* was 8px */
+    gap: 3px;                   /* was 8px */
 }
 
 .strategy-btn:hover {
