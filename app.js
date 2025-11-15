@@ -463,8 +463,6 @@ const strategies = {
                 "Take breaks as needed"
             ]
         },
-
-        // Additional Focus Strategy
         writeTodoList: {
             title: "📝 Write a To‑Do List",
             description: "Creating a clear list of tasks helps organize your thoughts and improve focus.",
