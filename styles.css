@@ -221,7 +221,7 @@ body {
 }
 
 .motivation-slider {
-    background: linear-gradient(to right, #e5e7eb 0%, #e5e7eb var(--value), #fbbf24 var(--value), #fbbf24 100%);
+    background: linear-gradient(to right, #fbbf24 0%, #fbbf24 var(--value), #e5e7eb var(--value), #e5e7eb 100%);
 }
 
 .focus-slider {
