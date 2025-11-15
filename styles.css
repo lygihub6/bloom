@@ -89,14 +89,14 @@ body {
 }
 
 .mood-value-label {
-    font-size: 13px;
+    font-size: 18px;
     opacity: 0.8;
-    font-weight: 500;
+    font-weight: 700;
 }
 
 .mood-value-number {
-    font-size: 36px;
-    font-weight: 700;
+    font-size: 30px;
+    font-weight: 500;
 }
 
 /* Action Buttons */
@@ -144,16 +144,16 @@ body {
     flex: 1;
     background: white;
     border-radius: 20px;
-    padding: 22px;              /* was 30px */
+    padding: 22px;            
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: 18px;                  /* was 25px */
+    gap: 18px;             
 }
 
 .slider-group {
-    padding-bottom: 12px;       /* was 20px */
+    padding-bottom: 12px;    
 }
 
 .slider-header {
@@ -225,7 +225,7 @@ body {
 }
 
 .focus-slider {
-    background: linear-gradient(to right, #e5e7eb 0%, #e5e7eb var(--value), #10b981 var(--value), #10b981 100%);
+    background: linear-gradient(to right, #10b981 0%, #10b981 var(--value), #e5e7eb var(--value), #e5e7eb 100%);
 }
 
 .stress-slider {
