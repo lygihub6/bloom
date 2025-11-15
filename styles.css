@@ -261,7 +261,7 @@ body {
 }
 
 .strategies-container {
-    padding: 12px 0;            /* was 20px 0 */
+    padding: 12px 0;         
     border-top: 1px solid #e5e7eb;
     border-bottom: 1px solid #e5e7eb;
 }
@@ -295,7 +295,7 @@ body {
 .strategy-text {
     font-size: 18px;            /* was 12px — bigger name */
     font-weight: 700;
-    color: #26cfed;
+    color: #0361ad
     text-align: center;
 }
 
