@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bloom – Interactive Mood Tracker</title>
+    <!-- p5.js library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+    <!-- Custom styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Hero section for the page title -->
+    <header class="hero">
+        <h1 class="hero-title">bloom</h1>
+        <p class="hero-subtitle">Interactive Mood Tracker</p>
+    </header>
+
+    <!-- Existing application container -->
+    <div class="app-container">
+        <!-- Left Panel -->
+        <div class="left-panel">
+            <!-- Canvas Container -->
+            <div class="canvas-container">
+                <div id="p5-container"></div>
+            </div>
+
+            <!-- Current Mood Card -->
+            <div class="current-mood-card">
+                <h2 class="mood-card-title">CURRENT MOOD</h2>
+                <div class="mood-values">
+                    <div class="mood-value-item">
+                        <span class="mood-value-label">Motivation</span>
+                        <span class="mood-value-number" id="motivationValue">70</span>
+                    </div>
+                    <div class="mood-value-item">
+                        <span class="mood-value-label">Focus</span>
+                        <span class="mood-value-number" id="focusValue">50</span>
+                    </div>
+                    <div class="mood-value-item">
+                        <span class="mood-value-label">Calm</span>
+                        <span class="mood-value-number" id="calmValue">90</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="btn-primary" id="logMoodBtn">
+                    📊 LOG MOOD
+                </button>
+                <button class="btn-secondary" id="clearLogBtn">
+                    🔄 CLEAR LOG
+                </button>
+            </div>
+        </div>
+
+        <!-- Right Panel -->
+        <div class="right-panel">
+            <!-- Motivation Slider -->
+            <div class="slider-group">
+                <div class="slider-header">
+                    <div class="slider-title">
+                        <span class="slider-emoji">☀️</span>
+                        <span class="slider-name">Motivation</span>
+                    </div>
+                    <span class="slider-value" id="motivationSliderValue">70</span>
+                </div>
+                <p class="slider-description">Height, Bloom &amp; Sun – How energized do you feel?</p>
+                <input type="range" class="slider motivation-slider" id="motivationSlider" min="0" max="100" value="70">
+            </div>
+
+            <!-- Focus Slider -->
+            <div class="slider-group">
+                <div class="slider-header">
+                    <div class="slider-title">
+                        <span class="slider-emoji">🎯</span>
+                        <span class="slider-name">Focus</span>
+                    </div>
+                    <span class="slider-value" id="focusSliderValue">50</span>
+                </div>
+                <p class="slider-description">Steadiness &amp; Stem – How concentrated is your mind?</p>
+                <input type="range" class="slider focus-slider" id="focusSlider" min="0" max="100" value="50">
+            </div>
+
+            <!-- Stress Slider -->
+            <div class="slider-group">
+                <div class="slider-header">
+                    <div class="slider-title">
+                        <span class="slider-emoji">🔥</span>
+                        <span class="slider-name">Stress</span>
+                    </div>
+                    <span class="slider-value" id="stressSliderValue">10</span>
+                </div>
+                <p class="slider-description">Droop &amp; Color – How much pressure do you feel?</p>
+                <input type="range" class="slider stress-slider" id="stressSlider" min="0" max="100" value="10">
+            </div>
+
+            <!-- Strategies Grid -->
+            <div class="strategies-container">
+                <div class="strategies-grid">
+                    <!-- Motivation Strategies -->
+                    <button class="strategy-btn" data-type="motivation" data-strategy="setGoal">
+                        <span class="strategy-text">Set a clear goal</span>
+                        <span class="strategy-number">motivation+10</span>
+                    </button>
+                    <button class="strategy-btn" data-type="motivation" data-strategy="smallTask">
+                        <span class="strategy-text">Complete a small task</span>
+                        <span class="strategy-number">motivation+10</span>
+                    </button>
+                    <button class="strategy-btn" data-type="motivation" data-strategy="rewardYourself">
+                        <span class="strategy-text">Reward yourself</span>
+                        <span class="strategy-number">motivation+10</span>
+                    </button>
+                    <button class="strategy-btn" data-type="motivation" data-strategy="motivateOthers">
+                        <span class="strategy-text">Motivated by others</span>
+                        <span class="strategy-number">motivation+10</span>
+                    </button>
+
+                    <!-- Focus Strategies -->
+                    <button class="strategy-btn" data-type="focus" data-strategy="eatHealthy">
+                        <span class="strategy-text">Eat healthier</span>
+                        <span class="strategy-number">focus+10</span>
+                    </button>
+                    <button class="strategy-btn" data-type="focus" data-strategy="sleepBetter">
+                        <span class="strategy-text">Sleep better</span>
+                        <span class="strategy-number">focus+10</span>
+                    </button>
+                    <button class="strategy-btn" data-type="focus" data-strategy="cleanSpace">
+                        <span class="strategy-text">Clean your space</span>
+                        <span class="strategy-number">focus+10</span>
+                    </button>
+                    <button class="strategy-btn" data-type="focus" data-strategy="focusMusic">
+                        <span class="strategy-text">Focus music</span>
+                        <span class="strategy-number">focus+10</span>
+                    </button>
+
+                    <!-- Stress Strategies -->
+                    <button class="strategy-btn" data-type="stress" data-strategy="takeWalk">
+                        <span class="strategy-text">Take a walk</span>
+                        <span class="strategy-number">stress-10</span>
+                    </button>
+                    <button class="strategy-btn" data-type="stress" data-strategy="deepBreath">
+                        <span class="strategy-text">Deep breath</span>
+                        <span class="strategy-number">stress-10</span>
+                    </button>
+                    <button class="strategy-btn" data-type="stress" data-strategy="talkFriend">
+                        <span class="strategy-text">Talk with a friend</span>
+                        <span class="strategy-number">stress-10</span>
+                    </button>
+
+                    <!-- Additional Motivation Strategy -->
+                    <button class="strategy-btn" data-type="motivation" data-strategy="visualizeSuccess">
+                        <span class="strategy-text">Visualize success</span>
+                        <span class="strategy-number">motivation+10</span>
+                    </button>
+
+                    <!-- Additional Focus Strategy -->
+                    <button class="strategy-btn" data-type="focus" data-strategy="writeTodoList">
+                        <span class="strategy-text">Write a to‑do list</span>
+                        <span class="strategy-number">focus+10</span>
+                    </button>
+
+                    <!-- Additional Stress Strategies -->
+                    <button class="strategy-btn" data-type="stress" data-strategy="listenCalmMusic">
+                        <span class="strategy-text">Calming music</span>
+                        <span class="strategy-number">stress-10</span>
+                    </button>
+                    <button class="strategy-btn" data-type="stress" data-strategy="stretchBreak">
+                        <span class="strategy-text">Stretch break</span>
+                        <span class="strategy-number">stress-10</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Recent Logs -->
+            <div class="recent-logs">
+                <h3 class="recent-logs-title">Recent Logs</h3>
+                <div id="historyContent">
+                    <p class="no-logs">No mood logs yet</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Journal Modal -->
+    <div class="modal-overlay" id="journalOverlay"></div>
+    <div class="modal journal-modal" id="journalModal">
+        <h2>🪶 Journal Reflection</h2>
+        <p>What made you feel this way?</p>
+        <textarea id="journalText" rows="5" placeholder="Write your thoughts here..."></textarea>
+        <div class="modal-buttons">
+            <button class="btn-modal-primary" id="saveJournal">Save</button>
+            <button class="btn-modal-secondary" id="cancelJournal">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Strategy Modal -->
+    <div class="modal-overlay" id="strategyOverlay"></div>
+    <div class="modal strategy-modal" id="strategyModal">
+        <h2 id="strategyTitle">Strategy</h2>
+        <p id="strategyDescription"></p>
+        <div id="strategySteps"></div>
+        <div class="modal-buttons">
+            <button class="btn-modal-primary" id="completeStrategy">Complete</button>
+            <button class="btn-modal-secondary" id="closeStrategy">Close</button>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Scripts -->
+    <script src="config.js"></script>
+    <script src="sketch.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
