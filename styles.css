@@ -21,22 +21,22 @@ body {
 .page-header {
     position: absolute;
     top: 20px;
-    left: 20px;
+    left: 100px;
     z-index: 100;
     /* Ensure the header text sits on top of the gradient background */
 }
 
 .page-title {
-    font-size: 56px;
+    font-size: 60px;
     font-weight: 800;
-    color: #1f2937;
+    color: #12dd4bf;
     margin-bottom: 4px;
 }
 
 .page-subtitle {
-    font-size: 14px;
+    font-size: 24px;
     font-weight: 400;
-    color: #6b7280;
+    color: #fde68a;
 }
 
 /* Reserve top space for the header */
