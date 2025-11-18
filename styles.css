@@ -229,7 +229,7 @@ body {
 .slider-value {
     font-size: 28px;
     font-weight: 700;
-    color: #7c3aed;
+    color: #f77043;
 }
 
 .slider-description {
@@ -324,7 +324,7 @@ body {
 .strategy-text {
     font-size: 18px;            /* was 12px — bigger name */
     font-weight: 700;
-    color: #ffc09c
+    color: #ffc09c;
     text-align: center;
 }
 
