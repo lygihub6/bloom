@@ -149,7 +149,7 @@ body {
 
 .btn-primary {
     background: linear-gradient(135deg, #77def2 0%, #55f7e1 100%);
-    color: white;
+    color: #cbe9f5;
     box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
 }
 
