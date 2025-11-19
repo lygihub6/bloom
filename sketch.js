@@ -430,7 +430,7 @@ function drawTimeline() {
   } else {
     // No logs yet
     fill(0, 0, 20, 70);
-    textSize(14);
+    textSize(18);
     textAlign(CENTER, CENTER);
     text("No logs yet — click 📝 to add your first mood.", stripX + stripW / 2, stripY + stripH / 2);
   }
