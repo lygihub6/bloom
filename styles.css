@@ -29,14 +29,14 @@ body {
 .page-title {
     font-size: 60px;
     font-weight: 800;
-    color: #eec6f5;
+    color: #b17be8;
     margin-bottom: 0px;
 }
 
 .page-subtitle {
     font-size: 20px;
     font-weight: 500;
-    color: #77def2; 
+    color: #c78ed1; 
 }
 
 /* Reserve top space for the header */
