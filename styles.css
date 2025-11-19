@@ -29,14 +29,14 @@ body {
 .page-title {
     font-size: 60px;
     font-weight: 800;
-    color: linear-gradient(135deg, #26cfed 0%, #d4c2f2 100%);
+    color: #26cfed;
     margin-bottom: 0px;
 }
 
 .page-subtitle {
     font-size: 20px;
     font-weight: 500;
-    color: linear-gradient(135deg, #d4c2f2 0%, #26cfed 100%); 
+    color: #89e9fa; 
 }
 
 /* Reserve top space for the header */
@@ -324,7 +324,7 @@ body {
 .strategy-text {
     font-size: 18px;            /* was 12px — bigger name */
     font-weight: 700;
-    color: #8A69D4;
+    color: #26cfed;
     text-align: center;
 }
 
