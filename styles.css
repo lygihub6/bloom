@@ -8,7 +8,7 @@
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    background: linear-gradient(135deg, #f5af89 0%, #d9c0fc 100%);
+    background: linear-gradient(135deg, #fccbb1 0%, #e3d2fc 100%);
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -29,14 +29,14 @@ body {
 .page-title {
     font-size: 60px;
     font-weight: 800;
-    color: #55e1fa;
+    color: #d3b6fa;
     margin-bottom: 0px;
 }
 
 .page-subtitle {
     font-size: 20px;
     font-weight: 500;
-    color: #89e9fa; 
+    color: #dbc2fc; 
 }
 
 /* Reserve top space for the header */
