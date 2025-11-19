@@ -29,14 +29,14 @@ body {
 .page-title {
     font-size: 60px;
     font-weight: 800;
-    color: #c7a3f7;
+    color: #bb90f5;
     margin-bottom: 0px;
 }
 
 .page-subtitle {
     font-size: 20px;
-    font-weight: 500;
-    color: #d3b6fa; 
+    font-weight: 600;
+    color: #c7a3f7; 
 }
 
 /* Reserve top space for the header */
@@ -569,7 +569,7 @@ body {
     }
     
     .mood-value-number {
-        font-size: 28px;
+        font-size: 26px;
     }
     
     .strategies-grid {
