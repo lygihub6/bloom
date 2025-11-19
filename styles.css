@@ -97,7 +97,7 @@ body {
 }
 
 .mood-card-title {
-    font-size: 14px;
+    font-size: 24px;
     font-weight: 700;
     letter-spacing: 2px;
     text-align: center;
@@ -118,13 +118,13 @@ body {
 }
 
 .mood-value-label {
-    font-size: 18px;
+    font-size: 20px;
     opacity: 0.8;
     font-weight: 700;
 }
 
 .mood-value-number {
-    font-size: 30px;
+    font-size: 26px;
     font-weight: 500;
 }
 
@@ -140,7 +140,7 @@ body {
     padding: 14px 20px;
     border: none;
     border-radius: 12px;
-    font-size: 13px;
+    font-size: 18px;
     font-weight: 700;
     letter-spacing: 1px;
     cursor: pointer;
